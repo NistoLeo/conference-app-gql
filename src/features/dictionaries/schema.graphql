@@ -38,3 +38,16 @@ input TypeInput {
   name: String!
   code: String
 }
+
+type Status{
+  id: Int!
+  name: String!
+}
+
+extend type Query {
+  typeList:[Type!]!
+  categoryList:[Category!]!
+  countryList:[Country!]!
+  countyList:[County!]!
+  cityList:[City!]!
+}
