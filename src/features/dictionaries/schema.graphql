@@ -1,19 +1,19 @@
 type Country {
   id: ID!
   name: String!
-  code: String    
+  code: String
 }
 
 type County {
   id: ID!
   name: String!
-  code: String    
+  code: String
 }
 
 type City {
   id: ID!
   name: String!
-  code: String    
+  code: String
 }
 type Category {
   id: ID!
@@ -39,15 +39,12 @@ input TypeInput {
   code: String
 }
 
-type Status{
-  id: Int!
-  name: String!
+extend type Query {
+  typeList: [Type!]!
+  categoryList: [Category!]!
+  countryList: [Country!]!
+  countyList: [County!]!
+  cityList: [City!]!
 }
 
-extend type Query {
-  typeList:[Type!]!
-  categoryList:[Category!]!
-  countryList:[Country!]!
-  countyList:[County!]!
-  cityList:[City!]!
-}
+

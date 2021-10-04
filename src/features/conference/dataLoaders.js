@@ -1,8 +1,8 @@
 const DataLoader = require('dataloader')
- 
+
 const getConferencesLoaders = dbInstance => {
   return {
-    
+
     locationById: new DataLoader(ids =>
       dbInstance
         .select('Id', 'Name', 'Address', 'Latitude', 'Longitude', 'CityId', 'CountyId', 'CountryId')
@@ -10,7 +10,7 @@ const getConferencesLoaders = dbInstance => {
         .whereIn('Id', ids)
         .then(rows => ids.map(id => rows.find(x => x.id === id)))
     ),
-    speakersByConferenceId: new DataLoader(ids => 
+    speakersByConferenceId: new DataLoader(ids =>
       dbInstance
         .select('s.Id', 's.Name', 's.Nationality', 's.Rating', 'c.ConferenceId', 'c.isMainSpeaker')
         .from('ConferenceXSpeaker AS c')
@@ -32,9 +32,9 @@ const getConferencesLoaders = dbInstance => {
           ids.map(x => x.userEmail)
         )
         .then(rows => ids.map(i => rows.find(x => x.conferenceId === i.id && x.attendeeEmail === i.userEmail)))
-    
+
     )
   }
 }
- 
+
 module.exports = getConferencesLoaders

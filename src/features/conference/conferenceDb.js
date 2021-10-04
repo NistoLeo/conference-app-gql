@@ -1,14 +1,14 @@
 const { SQLDataSource } = require('../../utils/sqlDataSource')
- 
+
 const conferenceColumns = ['Id', 'Name', 'ConferenceTypeId', 'LocationId', 'StartDate', 'EndDate', 'CategoryId']
 class ConferenceDb extends SQLDataSource {
   generateWhereClause(queryBuilder, filters = {}) {
     const { startDate, endDate, organizerEmail } = filters
     if (startDate) queryBuilder.andWhere('StartDate', '>=', startDate)
     if (endDate) queryBuilder.andWhere('EndDate', '<=', endDate)
-    if(organizerEmail) queryBuilder.andWhere('OrganizerEmail', organizerEmail)
+    if (organizerEmail) queryBuilder.andWhere('OrganizerEmail', organizerEmail)
   }
- 
+
   async getConferenceList(pager, filters) {
     const { page, pageSize } = pager
     const values = await this.knex
@@ -18,23 +18,49 @@ class ConferenceDb extends SQLDataSource {
       .orderBy('Id')
       .offset(page * pageSize)
       .limit(pageSize)
- 
+
     return { values }
   }
- 
+
   async getConferenceListTotalCount(filters) {
     return await this.knex('Conference').count('Id', { as: 'TotalCount' }).modify(this.generateWhereClause, filters).first()
   }
-  async getConferenceById(id){
+  async getConferenceById(id) {
     const result = await this.knex
-    .select(...conferenceColumns)
-    .from('Conference')
-    .where('Id', id)
-    .first()
+      .select(...conferenceColumns)
+      .from('Conference')
+      .where('Id', id)
+      .first()
     return result
+  }
+
+  async updateConferenceXAttendee({ attendeeEmail, conferenceId, statusId }) {
+    const current = await this.knex
+      .select("Id", "AttendeeEmail", "ConferenceId")
+      .from("ConferenceXAttendee")
+      .where("AttendeeEmail", attendeeEmail)
+      .andWhere("ConferenceId", conferenceId)
+      .first()
+
+    const updateAttendee = {
+      AttendeeEmail: attendeeEmail,
+      ConferenceId: conferenceId,
+      StatusId: statusId
+    }
+    let result
+    if (current && current.id) {
+      result = await this.knex("ConferenceXAttendee")
+        .update(updateAttendee, "StatusId")
+        .where("Id", current.id)
+    } else {
+      result = await this.knex("ConferenceXAttendee")
+        .returning("StatusId")
+        .insert(updateAttendee);
+    }
+    return result[0]
   }
 }
 
-  
- 
+
+
 module.exports = ConferenceDb
