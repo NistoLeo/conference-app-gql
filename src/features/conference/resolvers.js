@@ -60,7 +60,15 @@ const conferenceResolvers = {
         attend: async (_parent, { input }, { dataSources }, _info) => {
             const updateInput = { ...input, statusId: 3 }
             const statusId = await dataSources.conferenceDb.updateConferenceXAttendee(updateInput)
-            return statusId ? randomCharacters(10) : null
+            const suggestedConferences = await dataSources.conferenceApi.getConferenceSuggestions(input)
+            const code = statusId ? randomCharacters(10) : null
+            return { suggestedConferences, code }
+        },
+
+        withdraw: async (_parent, { input }, { dataSources }, _info) => {
+            const updateInput = { ...input, statusId: 2 }
+            const statusId = await dataSources.conferenceDb.updateConferenceXAttendee(updateInput);
+            return statusId
         }
     }
 
