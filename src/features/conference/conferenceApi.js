@@ -8,10 +8,10 @@ class ConferenceApi extends RESTDataSource {
     }
 
     async getConferenceSuggestions(input) {
-        const {conferenceId, attendeeEmail} = input
+        const { conferenceId, attendeeEmail } = input
         //return await this.get('suggestions/list',{conferenceId, attendeeEmail})
         return suggestedConferences
-    } 
+    }
 }
 
 module.exports = ConferenceApi

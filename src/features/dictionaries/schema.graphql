@@ -1,42 +1,48 @@
+type Category {
+  id: Int!
+  name: String!
+  code: String
+}
+
+# input CategoryInput {
+#   id: ID!
+#   name: String!
+#   code: String
+# }
+
+type Type {
+  id: Int!
+  name: String!
+  code: String
+}
+
+# input TypeInput {
+#   id: ID!
+#   name: String!
+#   code: String
+# }
+
 type Country {
-  id: ID!
+  id: Int!
   name: String!
   code: String
 }
 
 type County {
-  id: ID!
+  id: Int!
   name: String!
   code: String
 }
 
 type City {
-  id: ID!
-  name: String!
-  code: String
-}
-type Category {
-  id: ID!
+  id: Int!
   name: String!
   code: String
 }
 
-input CategoryInput {
-  id: ID!
+type Status {
+  id: Int!
   name: String!
-  code: String
-}
-
-type Type {
-  id: ID!
-  name: String!
-  code: String
-}
-
-input TypeInput {
-  id: ID!
-  name: String!
-  code: String
 }
 
 extend type Query {
@@ -46,5 +52,3 @@ extend type Query {
   countyList: [County!]!
   cityList: [City!]!
 }
-
-
